@@ -452,3 +452,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+
+# Debug Files
+**/Debug/
