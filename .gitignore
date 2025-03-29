@@ -12,3 +12,34 @@ _deps
 CMakeUserPresets.json
 build/*
 !build/build.xml
+# Build folders
+/Builds/
+/build/
+out/
+
+# Personal IDE settings
+.idea/
+*.vcxproj
+*.vcxproj.filters
+*.sln
+*.user
+*.suo
+*.code-workspace
+
+# JUCE Projucer files - if you're not tracking them explicitly
+*.jucer
+
+# System files
+.DS_Store
+Thumbs.db
+
+# CMake build system files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+
+# VST3 plugin cache
+/VST3_Cache/
+
+# Other
+*.orig
