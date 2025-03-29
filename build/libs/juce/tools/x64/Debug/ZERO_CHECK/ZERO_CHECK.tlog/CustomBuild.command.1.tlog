@@ -1,0 +1,10 @@
+^C:\USERS\VIKIN\DOCUMENTS\CODING STUFF\SQUASH-COMPRESSOR\BUILD\LIBS\JUCE\TOOLS\CMAKEFILES\2B48C2ED239836796AD70A3737BA1CB7\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/vikin/Documents/Coding Stuff/squash-compressor/libs/juce" "-BC:/Users/vikin/Documents/Coding Stuff/squash-compressor/build/libs/juce/tools" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/Users/vikin/Documents/Coding Stuff/squash-compressor/build/libs/juce/tools/JUCE.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

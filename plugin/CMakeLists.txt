@@ -1,0 +1,30 @@
+juce_add_plugin(SquashCompressorPlugin
+    COMPANY_NAME lullo-fi
+    IS_SYNTH FALSE
+    NEEDS_MIDI_INPUT FALSE
+    NEEDS_MIDI_OUTPUT FALSE
+    PLUGIN_MANUFACTURER_CODE LFI
+    PLUGIN_CODE SC
+    FORMATS AU VST3 Standalone
+)
+
+target_sources(SquashCompressorPlugin
+    PRIVATE src/PluginEditor.cpp src/PluginProcessor.cpp
+)
+
+target_include_directories(SquashCompressorPlugin PRIVATE include)
+
+target_link_libraries(SquashCompressorPlugin
+    PRIVATE
+        juce::juce_audio_utils
+    PUBLIC
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_lto_flags
+        juce::juce_recommended_warning_flags
+    )
+
+target_compile_definitions(SquashCompressorPlugin
+PUBLIC
+    JUCE_WEB_BROWSER=0
+    JUCE_USE_CURL=0
+    JUCE_VST_CAN_REPLACE_VST2=0)
