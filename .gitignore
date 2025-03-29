@@ -38,6 +38,9 @@ CMakeCache.txt
 CMakeFiles/
 cmake_install.cmake
 
+Debug/
+SquashCompressorPlugin_artefacts
+
 # VST3 plugin cache
 /VST3_Cache/
 
