@@ -457,3 +457,19 @@ build/
 
 # Debug Files
 **/Debug/
+
+# Build output
+dist/
+
+# Local environment variables
+.env.local
+
+# Vite cache
+.vite/
+
+# Editor directories and files
+.vscode/
+.idea/
+*.ntvs*
+*.njsproj
+*.sln
