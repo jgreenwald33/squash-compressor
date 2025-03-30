@@ -6,6 +6,7 @@ juce_add_plugin(SquashCompressorPlugin
     PLUGIN_MANUFACTURER_CODE LFI
     PLUGIN_CODE SC
     FORMATS AU VST3 Standalone
+    NEEDS_WEBVIEW2 TRUE
 )
 
 target_sources(SquashCompressorPlugin
@@ -27,4 +28,5 @@ target_compile_definitions(SquashCompressorPlugin
 PUBLIC
     JUCE_WEB_BROWSER=1
     JUCE_USE_CURL=0
-    JUCE_VST_CAN_REPLACE_VST2=0)
+    JUCE_VST_CAN_REPLACE_VST2=0
+    JUCE_USE_WIN_WEBVIEW2_WITH_STATIC_LINKING=1)
