@@ -17,7 +17,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     setResizable(true,true);
 
     // temporary rendering of preexisting site
-    webView.goToURL("https://google.com");
+    webView.goToURL("http://localhost:5173/");
 
     setSize (width, height);
 }
