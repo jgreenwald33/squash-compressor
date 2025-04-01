@@ -12,9 +12,8 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     addAndMakeVisible(webView);
 
     auto screenSize = juce::Desktop::getInstance().getDisplays().getPrimaryDisplay();
-    int width = screenSize->userArea.getWidth() / 2;
-    int height = screenSize->userArea.getHeight() / 2;
-    setResizable(true,true);
+    int width = int(std::round(screenSize->userArea.getWidth() * 0.65));
+    int height = int(std::round(screenSize->userArea.getHeight() * 0.65));
 
     // temporary rendering of preexisting site
     webView.goToURL("http://localhost:5173/");
