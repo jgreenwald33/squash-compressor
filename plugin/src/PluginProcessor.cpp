@@ -173,13 +173,40 @@ void AudioPluginAudioProcessor::getStateInformation (juce::MemoryBlock& destData
     juce::ignoreUnused (destData);
 }
 
+
 void AudioPluginAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
     juce::ignoreUnused (data, sizeInBytes);
 }
+// get values held within the ValueStateTree
+ChainSettings AudioPluginAudioProcessor::GetChainSettings(juce::AudioProcessorValueTreeState& treeState) {
+    ChainSettings settings;
+    settings.attack = treeState.getRawParameterValue("Attack")->load();
+    settings.release = treeState.getRawParameterValue("Release")->load();
+    settings.ratio = treeState.getRawParameterValue("Ratio")->load();
+    settings.threshold = treeState.getRawParameterValue("Threshold")->load();
+    settings.makeupGain = treeState.getRawParameterValue("Makeup Gain")->load();
+
+    return settings;
 }
+
+juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::createParamLayout() {
+    juce::AudioProcessorValueTreeState::ParameterLayout layout;
+
+    // items to keep track of 
+    layout.add(std::make_unique<juce::AudioParameterFloat>("Attack","Attack", juce::NormalisableRange<float>(0.01f, 1000.0f, 0.01f),0.01f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("Release","Release", juce::NormalisableRange<float>(1.0f, 3000.0f, 0.5f),1.0f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("Ratio","Ratio", juce::NormalisableRange<float>(1.0f, 10.0f, 0.5f),1.0f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("Threshold","Threshold", juce::NormalisableRange<float>(-60.0f, 0.0f, 0.01f),0.0f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("Makeup Gain","Makeup Gain", juce::NormalisableRange<float>(-12.0f, 12.0f, 0.0f),0.5f));
+
+    return layout;
+}
+}
+
+
 //==============================================================================
 // This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()

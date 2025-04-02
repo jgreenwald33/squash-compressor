@@ -2,6 +2,15 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 
+struct ChainSettings {
+    float attack {0.0f};
+    float release {0.0f};
+    float ratio {1.0f};
+    float threshold{0.0f};
+    float makeupGain{0.0f};
+    float wetDryPercentage{1.0f};
+};
+
 namespace webview_plugin {
     class AudioPluginAudioProcessor final : public juce::AudioProcessor
     {
@@ -41,6 +50,10 @@ namespace webview_plugin {
         //==============================================================================
         void getStateInformation (juce::MemoryBlock& destData) override;
         void setStateInformation (const void* data, int sizeInBytes) override;
+
+        static juce::AudioProcessorValueTreeState::ParameterLayout createParamLayout();
+        juce::AudioProcessorValueTreeState processorTree{ *this, nullptr, "Parameters", createParamLayout() };
+        ChainSettings GetChainSettings(juce::AudioProcessorValueTreeState& treeState);
     
     private:
         //==============================================================================
