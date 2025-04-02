@@ -22,31 +22,29 @@ export default function SliderGroup({max,min,effectName,units}:Props) {
             <Text>
                 {effectName}
             </Text>
-            <Paper
-                bg={"#e0e0e0"}
-                shadow="xl" 
-                style={{borderRadius:"9999px", justifyContent:"center", alignItems:"center"}} 
-                p={"10px"} 
-                display={"flex"} 
-            >
+
                 <Paper
-                    bg={"#fff"}
-                    style={{borderRadius:"9999px", justifyContent:"center", alignItems:"center", boxShadow:"0 8px 4px -1px gray"}} 
-                    p={"10px"} 
+                    style={{
+                        borderRadius:"9999px",
+                        justifyContent:"center",
+                        alignItems:"center",
+                        boxShadow:"0 8px 8px -1px gray", 
+                        background: "radial-gradient(circle, rgba(255,255,255,1) 20%, rgba(229,229,229,1) 80%)"
+                    }} 
+                    p={"15px"} 
                     display={"flex"}
                     
                 >
                     <AngleSlider className={"flip"}
-                        bg={"#fff"}
                         onChange={(e) => {
                             updateValue(Number(e));
                         }}
                         withLabel={false}
                         defaultValue={20}
+                        style={{border:"1px solid #e9e9e9", background: "linear-gradient(195deg, rgba(255,255,255,1) 50%, rgba(229,229,229,1) 100%)"}}
                     />
                 </Paper>
 
-            </Paper>
 
             <NumberInput
                 w={"100px"} 
