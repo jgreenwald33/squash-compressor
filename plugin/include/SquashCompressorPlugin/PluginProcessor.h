@@ -8,7 +8,7 @@ struct ChainSettings {
     float ratio {1.0f};
     float threshold{0.0f};
     float makeupGain{0.0f};
-    float wetDryPercentage{1.0f};
+    float dryWetPercentage{1.0f};
 };
 
 namespace webview_plugin {

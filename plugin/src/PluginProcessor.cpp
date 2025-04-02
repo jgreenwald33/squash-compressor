@@ -190,6 +190,7 @@ ChainSettings AudioPluginAudioProcessor::GetChainSettings(juce::AudioProcessorVa
     settings.ratio = treeState.getRawParameterValue("Ratio")->load();
     settings.threshold = treeState.getRawParameterValue("Threshold")->load();
     settings.makeupGain = treeState.getRawParameterValue("Makeup Gain")->load();
+    settings.dryWetPercentage = treeState.getRawParameterValue("Dry/Wet")->load();
 
     return settings;
 }
@@ -203,6 +204,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::c
     layout.add(std::make_unique<juce::AudioParameterFloat>("Ratio","Ratio", juce::NormalisableRange<float>(1.0f, 10.0f, 0.5f),1.0f));
     layout.add(std::make_unique<juce::AudioParameterFloat>("Threshold","Threshold", juce::NormalisableRange<float>(-60.0f, 0.0f, 0.01f),0.0f));
     layout.add(std::make_unique<juce::AudioParameterFloat>("Makeup Gain","Makeup Gain", juce::NormalisableRange<float>(-12.0f, 12.0f, 0.5f),0.0f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("Dry/Wet", "Dry/Wet", juce::NormalisableRange<float>(0.0f, 1.0f, 0.01f), 1.0f));
 
     return layout;
 }
