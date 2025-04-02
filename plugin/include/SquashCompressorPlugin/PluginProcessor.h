@@ -1,6 +1,7 @@
 #pragma once
 
 #include <juce_audio_processors/juce_audio_processors.h>
+#include <juce_dsp/juce_dsp.h>
 
 struct ChainSettings {
     float attack {0.0f};
@@ -58,6 +59,14 @@ namespace webview_plugin {
     private:
         //==============================================================================
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
+        using Gain = juce::dsp::Gain<float>;
+        using DryWet = juce::dsp::DryWetMixer<float>;
+        using Compressor = juce::dsp::Compressor<float>;
+        using Mono = juce::dsp::ProcessorChain<Compressor,Gain>;
+
+        Mono leftChannel, rightChannel;
+        DryWet dryWetMixer;
+        juce::AudioBuffer<float> drySignal;
     };
 }
 
