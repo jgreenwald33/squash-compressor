@@ -161,7 +161,9 @@ bool AudioPluginAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* AudioPluginAudioProcessor::createEditor()
 {
-    return new AudioPluginAudioProcessorEditor (*this);
+    // remove and replace with generic editor for effect debugging
+    return new juce::GenericAudioProcessorEditor(*this);
+    // return new AudioPluginAudioProcessorEditor (*this);
 }
 
 //==============================================================================
@@ -200,7 +202,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::c
     layout.add(std::make_unique<juce::AudioParameterFloat>("Release","Release", juce::NormalisableRange<float>(1.0f, 3000.0f, 0.5f),1.0f));
     layout.add(std::make_unique<juce::AudioParameterFloat>("Ratio","Ratio", juce::NormalisableRange<float>(1.0f, 10.0f, 0.5f),1.0f));
     layout.add(std::make_unique<juce::AudioParameterFloat>("Threshold","Threshold", juce::NormalisableRange<float>(-60.0f, 0.0f, 0.01f),0.0f));
-    layout.add(std::make_unique<juce::AudioParameterFloat>("Makeup Gain","Makeup Gain", juce::NormalisableRange<float>(-12.0f, 12.0f, 0.0f),0.5f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("Makeup Gain","Makeup Gain", juce::NormalisableRange<float>(-12.0f, 12.0f, 0.5f),0.0f));
 
     return layout;
 }
