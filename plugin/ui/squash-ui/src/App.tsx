@@ -9,7 +9,7 @@ function App() {
   const [threshold,setThreshold] = useState(-30);
   const [knee,setKnee] = useState(10);
   return (
-    <Container w={"100vw"} h={"100vh"} px={"xl"} py={"sm"} bg={""}>
+    <Container w={"100vw"} h={"100vh"} px={"xl"} py={"xl"} bg={""}>
       <Stack h={"100%"} justify='space-between' gap={"sm"}>
         <Title w={"100%"} style={{textAlign:"start"}}>
           LOGO

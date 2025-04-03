@@ -12,11 +12,16 @@ interface Props {
 export default function SliderGroup({max,min,effectName,units}:Props) {
 
     const updateValue = (value:number) => {
-        let convertedValue:number = Math.round((value - 20) * ((max + 12) / 360))
-        setValue(convertedValue)
+        console.log("Within updateValue")
+        if (!changingSlider) {
+            let convertedValue:number = (value + 180) % 360;
+            setValue(convertedValue)
+        }
+
     }
 
     const [value,setValue] = useState<string | number>(min);
+    const [changingSlider, setChangingSlider] = useState<boolean>(false);
     return (
         <Stack align="center">
             <Text>
@@ -36,11 +41,12 @@ export default function SliderGroup({max,min,effectName,units}:Props) {
                     
                 >
                     <AngleSlider className={"flip"}
+                        onMouseDown={() => setChangingSlider(true)}
+                        onMouseUp={() => setChangingSlider(false)}
                         onChange={(e) => {
                             updateValue(Number(e));
                         }}
                         withLabel={false}
-                        defaultValue={20}
                         style={{border:"1px solid #e9e9e9", background: "linear-gradient(195deg, rgba(255,255,255,1) 50%, rgba(229,229,229,1) 100%)"}}
                     />
                 </Paper>
@@ -51,7 +57,9 @@ export default function SliderGroup({max,min,effectName,units}:Props) {
                 value={value}
                 min={min}
                 max={max}
-                onChange={setValue}
+                onChange={(e) => {
+                    setValue(e);
+                }}
                 hideControls
                 rightSection= {units ? units : ""}/>
         </Stack>
