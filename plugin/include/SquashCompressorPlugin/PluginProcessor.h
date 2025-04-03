@@ -12,6 +12,11 @@ struct ChainSettings {
     float dryWetPercentage{1.0f};
 };
 
+enum ChainOrder {
+    COMPRESSOR,
+    GAIN
+};
+
 namespace webview_plugin {
     class AudioPluginAudioProcessor final : public juce::AudioProcessor
     {
