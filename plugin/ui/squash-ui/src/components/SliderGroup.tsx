@@ -6,16 +6,25 @@ interface Props {
     min:number,
     effectName:string,
     units?:string
+    step?:number
 }
 
 
-export default function SliderGroup({max,min,effectName,units}:Props) {
+export default function SliderGroup({max,min,effectName,units, step=0.1}:Props) {
 
     const updateValue = (value:number) => {
         console.log("Within updateValue")
         if (!changingSlider) {
-            let convertedValue:number = (value + 180) % 360;
-            setValue(convertedValue)
+            const range = max - min;
+
+            let shifted = value + 180;
+        
+            shifted = ((shifted % 360) + 360) % 360;
+        
+            const scaled = (shifted / 360) * range + min;
+            
+            const decimalSpots = (step.toString().split('.')[1] || '').length;
+            setValue(parseFloat((Math.round(scaled / step) * step).toFixed(decimalSpots)));
         }
 
     }
@@ -24,8 +33,8 @@ export default function SliderGroup({max,min,effectName,units}:Props) {
     const [changingSlider, setChangingSlider] = useState<boolean>(false);
     return (
         <Stack align="center">
-            <Text>
-                {effectName}
+            <Text style={{fontWeight:"medium", letterSpacing: "0.2rem"}}>
+                {effectName.toUpperCase()}
             </Text>
 
                 <Paper
@@ -53,7 +62,8 @@ export default function SliderGroup({max,min,effectName,units}:Props) {
 
 
             <NumberInput
-                w={"100px"} 
+                w={"100px"}
+
                 value={value}
                 min={min}
                 max={max}
