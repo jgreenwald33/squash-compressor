@@ -1,5 +1,5 @@
 juce_add_plugin(SquashCompressorPlugin
-    COMPANY_NAME lullo-fi
+    COMPANY_NAME "lullo-fi audio"
     IS_SYNTH FALSE
     NEEDS_MIDI_INPUT FALSE
     NEEDS_MIDI_OUTPUT FALSE

@@ -93,7 +93,7 @@ namespace webview_plugin {
 
         juce::dsp::ProcessSpec dryWetSpec;
         dryWetSpec.maximumBlockSize = samplesPerBlock;
-        dryWetSpec.numChannels = 1;
+        dryWetSpec.numChannels = juce::jmax(getTotalNumInputChannels(), getTotalNumOutputChannels());
         dryWetSpec.sampleRate = sampleRate;
 
         rightChannel.prepare(spec);
@@ -152,8 +152,6 @@ namespace webview_plugin {
     void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
                                                 juce::MidiBuffer& midiMessages)
     {
-        juce::ignoreUnused (midiMessages);
-
         juce::ScopedNoDenormals noDenormals;
         auto totalNumInputChannels  = getTotalNumInputChannels();
         auto totalNumOutputChannels = getTotalNumOutputChannels();
