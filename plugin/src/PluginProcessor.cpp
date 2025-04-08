@@ -208,8 +208,8 @@ namespace webview_plugin {
     juce::AudioProcessorEditor* AudioPluginAudioProcessor::createEditor()
     {
         // remove and replace with generic editor for effect debugging
-        return new juce::GenericAudioProcessorEditor(*this);
-        // return new AudioPluginAudioProcessorEditor (*this);
+        // return new juce::GenericAudioProcessorEditor(*this);
+        return new AudioPluginAudioProcessorEditor (*this);
     }
 
     //==============================================================================

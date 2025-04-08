@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PluginProcessor.h"
+#include "SquashCompressorPlugin/PluginProcessor.h"
 #include <juce_gui_extra/juce_gui_extra.h>
 
 namespace webview_plugin {
@@ -14,6 +14,8 @@ namespace webview_plugin {
         void resized() override;
     
     private:
+    using Resource = juce::WebBrowserComponent::Resource;
+    std::optional<Resource> getResource(const juce::String& url);
         // This reference is provided as a quick way for your editor to
         // access the processor object that created it.
         AudioPluginAudioProcessor& processorRef;
