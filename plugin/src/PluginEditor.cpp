@@ -44,7 +44,8 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     webView{juce::WebBrowserComponent::Options{}.withBackend(juce::WebBrowserComponent::Options::Backend::webview2)
     .withWinWebView2Options(juce::WebBrowserComponent::Options::WinWebView2{}.withUserDataFolder
     (juce::File::getSpecialLocation(juce::File::tempDirectory)))
-    .withResourceProvider([this](const auto& url){return getResource(url);})}
+    .withResourceProvider([this](const auto& url){return getResource(url);})
+    .withNativeIntegrationEnabled()}
 {
     juce::ignoreUnused (processorRef);
     addAndMakeVisible(webView);
@@ -54,8 +55,10 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     int height = int(std::round(screenSize->userArea.getHeight() * 0.75));
 
     // temporary rendering of preexisting site
-    // webView.goToURL("http://localhost:5173/");
-    webView.goToURL(webView.getResourceProviderRoot());
+    webView.goToURL("http://localhost:5173/");
+
+    // will need this for distribution
+    // webView.goToURL(webView.getResourceProviderRoot());
 
     setSize (width, height);
 }
