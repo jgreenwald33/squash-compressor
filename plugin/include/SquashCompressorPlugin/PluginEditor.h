@@ -20,6 +20,9 @@ namespace webview_plugin {
         // access the processor object that created it.
         AudioPluginAudioProcessor& processorRef;
         
+        // this component will not be used in the final design and is just used to verify the connection of the backend and front end
+        juce::TextButton runJavascriptButton{"Run some JavaScript"};
+
         juce::WebBrowserComponent webView;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)

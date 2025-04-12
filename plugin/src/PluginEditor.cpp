@@ -47,8 +47,25 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     .withResourceProvider([this](const auto& url){return getResource(url);})
     .withNativeIntegrationEnabled()}
 {
+
+    runJavascriptButton.onClick = [this] {
+        constexpr auto JAVASCRIPT_TO_RUN{"console.log(\"Hello from C++!\")"};
+        webView.evaluateJavascript(
+            JAVASCRIPT_TO_RUN,
+            [](juce::WebBrowserComponent::EvaluationResult result) {
+                if (const auto* resultPtr = result.getResult()) {
+                    std::cout << "JavasScript evalution result: " << resultPtr->toString() <<std::endl;
+                } 
+                else {
+                    std::cout << "JavasScript evalution failed because: " << result.getError()->message <<std::endl;
+                }
+            }
+        );
+    };
+
     juce::ignoreUnused (processorRef);
     addAndMakeVisible(webView);
+    addAndMakeVisible(runJavascriptButton);
 
     auto screenSize = juce::Desktop::getInstance().getDisplays().getPrimaryDisplay();
     int width = int(std::round(screenSize->userArea.getWidth() * 0.75));
@@ -70,7 +87,9 @@ AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
 
 void AudioPluginAudioProcessorEditor::resized()
 {
-    webView.setBounds(getLocalBounds());
+    auto bounds =  getLocalBounds();
+    webView.setBounds(bounds.removeFromRight(getWidth() / 2));
+    runJavascriptButton.setBounds(bounds.removeFromLeft(getWidth()/2));
 }
 auto AudioPluginAudioProcessorEditor::getResource(const juce::String& url) -> std::optional<Resource> {
     static const auto resourceFileRoot = juce::File{R"(plugin\ui\squash-ui)"};
