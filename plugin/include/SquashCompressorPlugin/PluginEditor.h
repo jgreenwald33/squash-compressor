@@ -16,13 +16,18 @@ namespace webview_plugin {
     private:
     using Resource = juce::WebBrowserComponent::Resource;
     std::optional<Resource> getResource(const juce::String& url);
+    
+    void nativeFunction(const juce::Array<juce::var>& args, 
+        juce::WebBrowserComponent::NativeFunctionCompletion completion);
+
         // This reference is provided as a quick way for your editor to
         // access the processor object that created it.
         AudioPluginAudioProcessor& processorRef;
         
         // this component will not be used in the final design and is just used to verify the connection of the backend and front end
         juce::TextButton runJavascriptButton{"Run some JavaScript"};
-
+        juce::TextButton emitJavascriptEventButton{"Emit JavaScript event"};
+        juce::Label labelUpdatedFromJavaScript{"label", "To be updated from JavaScript"};
         juce::WebBrowserComponent webView;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)

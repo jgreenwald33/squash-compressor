@@ -45,31 +45,55 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     .withWinWebView2Options(juce::WebBrowserComponent::Options::WinWebView2{}.withUserDataFolder
     (juce::File::getSpecialLocation(juce::File::tempDirectory)))
     .withResourceProvider([this](const auto& url){return getResource(url);})
-    .withNativeIntegrationEnabled()}
+    .withNativeIntegrationEnabled()
+    .withEventListener("ratioUpdate",
+    [this](juce::var ratioObject) {
+        labelUpdatedFromJavaScript.setText("Ratio value: " + ratioObject.getProperty("ratioVal",0).toString(),
+        juce::dontSendNotification);
+    })
+    .withEventListener("gainUpdate",
+        [this](juce::var gainObject) {
+            labelUpdatedFromJavaScript.setText("Gain value: " + gainObject.getProperty("gainVal",0).toString(),
+            juce::dontSendNotification);
+        })
+    .withEventListener("thresholdUpdate",
+        [this](juce::var thresholdObject) {
+            labelUpdatedFromJavaScript.setText("Threshold value: " + thresholdObject.getProperty("thresholdVal",0).toString(),
+            juce::dontSendNotification);
+        })
+    .withEventListener("attackUpdate",
+        [this](juce::var ratioObject) {
+            labelUpdatedFromJavaScript.setText("Attack value: " + ratioObject.getProperty("attackVal",0).toString(),
+            juce::dontSendNotification);
+        })
+    .withEventListener("releaseUpdate",
+        [this](juce::var ratioObject) {
+            labelUpdatedFromJavaScript.setText("Release value: " + ratioObject.getProperty("releaseVal",0).toString(),
+            juce::dontSendNotification);
+        })
+    .withEventListener("dryWetUpdate",
+        [this](juce::var ratioObject) {
+            labelUpdatedFromJavaScript.setText("Dry/Wet value: " + ratioObject.getProperty("dryWetVal",0).toString(),
+            juce::dontSendNotification);
+        })
+    }
 {
-
-    runJavascriptButton.onClick = [this] {
-        constexpr auto JAVASCRIPT_TO_RUN{"console.log(\"Hello from C++!\")"};
-        webView.evaluateJavascript(
-            JAVASCRIPT_TO_RUN,
-            [](juce::WebBrowserComponent::EvaluationResult result) {
-                if (const auto* resultPtr = result.getResult()) {
-                    std::cout << "JavasScript evalution result: " << resultPtr->toString() <<std::endl;
-                } 
-                else {
-                    std::cout << "JavasScript evalution failed because: " << result.getError()->message <<std::endl;
-                }
-            }
-        );
-    };
-
     juce::ignoreUnused (processorRef);
     addAndMakeVisible(webView);
     addAndMakeVisible(runJavascriptButton);
 
+    emitJavascriptEventButton.onClick = [this] {
+        static const juce::Identifier EVENT_ID("exampleEvent");
+        webView.emitEventIfBrowserIsVisible(EVENT_ID, 42.0);
+    };
+
+    addAndMakeVisible(emitJavascriptEventButton);
+
     auto screenSize = juce::Desktop::getInstance().getDisplays().getPrimaryDisplay();
     int width = int(std::round(screenSize->userArea.getWidth() * 0.75));
     int height = int(std::round(screenSize->userArea.getHeight() * 0.75));
+
+    addAndMakeVisible(labelUpdatedFromJavaScript);
 
     // temporary rendering of preexisting site
     webView.goToURL("http://localhost:5173/");
@@ -89,7 +113,9 @@ void AudioPluginAudioProcessorEditor::resized()
 {
     auto bounds =  getLocalBounds();
     webView.setBounds(bounds.removeFromRight(getWidth() / 2));
-    runJavascriptButton.setBounds(bounds.removeFromLeft(getWidth()/2));
+    runJavascriptButton.setBounds(bounds.removeFromTop(50).reduced(5));
+    emitJavascriptEventButton.setBounds(bounds.removeFromTop(50).reduced(5));
+    labelUpdatedFromJavaScript.setBounds(bounds.removeFromTop(50).reduced(5));
 }
 auto AudioPluginAudioProcessorEditor::getResource(const juce::String& url) -> std::optional<Resource> {
     static const auto resourceFileRoot = juce::File{R"(plugin\ui\squash-ui)"};
@@ -105,5 +131,19 @@ auto AudioPluginAudioProcessorEditor::getResource(const juce::String& url) -> st
 
     return std::nullopt;
 }
+
+void AudioPluginAudioProcessorEditor::nativeFunction(const juce::Array<juce::var>& args, 
+    juce::WebBrowserComponent::NativeFunctionCompletion completion) {
+        juce::String concatenatedArgs;
+
+        for (const auto& arg : args) {
+            concatenatedArgs += arg.toString();
+        }
+
+        labelUpdatedFromJavaScript.setText("Native function called with args: " + concatenatedArgs,
+        juce::dontSendNotification);
+
+        completion("nativefunction callback All OK!");
+    }
 
 }
