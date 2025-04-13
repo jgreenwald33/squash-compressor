@@ -40,7 +40,7 @@ namespace webview_plugin {
     }
 
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor& p)
-    : AudioProcessorEditor (&p), processorRef (p),
+    : AudioProcessorEditor (&p), audioProcessor(p), processorRef (p),
     webView{juce::WebBrowserComponent::Options{}.withBackend(juce::WebBrowserComponent::Options::Backend::webview2)
     .withWinWebView2Options(juce::WebBrowserComponent::Options::WinWebView2{}.withUserDataFolder
     (juce::File::getSpecialLocation(juce::File::tempDirectory)))
@@ -48,52 +48,38 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     .withNativeIntegrationEnabled()
     .withEventListener("ratioUpdate",
     [this](juce::var ratioObject) {
-        labelUpdatedFromJavaScript.setText("Ratio value: " + ratioObject.getProperty("ratioVal",0).toString(),
-        juce::dontSendNotification);
+        *audioProcessor.processorTree.getRawParameterValue("Ratio") = ratioObject.getProperty("ratioVal",1.0f);
     })
+    // Might be able to condense these event listeners into a single event later, with an effect name param
     .withEventListener("gainUpdate",
         [this](juce::var gainObject) {
-            labelUpdatedFromJavaScript.setText("Gain value: " + gainObject.getProperty("gainVal",0).toString(),
-            juce::dontSendNotification);
+            *audioProcessor.processorTree.getRawParameterValue("Makeup Gain") = gainObject.getProperty("gainVal",0.0f);
         })
     .withEventListener("thresholdUpdate",
         [this](juce::var thresholdObject) {
-            labelUpdatedFromJavaScript.setText("Threshold value: " + thresholdObject.getProperty("thresholdVal",0).toString(),
-            juce::dontSendNotification);
+            *audioProcessor.processorTree.getRawParameterValue("Threshold") = thresholdObject.getProperty("thresholdVal",0.0f);
         })
     .withEventListener("attackUpdate",
-        [this](juce::var ratioObject) {
-            labelUpdatedFromJavaScript.setText("Attack value: " + ratioObject.getProperty("attackVal",0).toString(),
-            juce::dontSendNotification);
+        [this](juce::var attackObject) {
+            *audioProcessor.processorTree.getRawParameterValue("Attack") = attackObject.getProperty("attackVal",0.01f);
         })
     .withEventListener("releaseUpdate",
-        [this](juce::var ratioObject) {
-            labelUpdatedFromJavaScript.setText("Release value: " + ratioObject.getProperty("releaseVal",0).toString(),
-            juce::dontSendNotification);
+        [this](juce::var releaseObject) {
+            *audioProcessor.processorTree.getRawParameterValue("Releae") = releaseObject.getProperty("releaseVal",1.0f);
         })
     .withEventListener("dryWetUpdate",
-        [this](juce::var ratioObject) {
-            labelUpdatedFromJavaScript.setText("Dry/Wet value: " + ratioObject.getProperty("dryWetVal",0).toString(),
-            juce::dontSendNotification);
+        [this](juce::var dryWetObject) {
+            *audioProcessor.processorTree.getRawParameterValue("Dry/Wet") = dryWetObject.getProperty("dryWetVal",1.0f);
         })
     }
 {
     juce::ignoreUnused (processorRef);
     addAndMakeVisible(webView);
-    addAndMakeVisible(runJavascriptButton);
-
-    emitJavascriptEventButton.onClick = [this] {
-        static const juce::Identifier EVENT_ID("exampleEvent");
-        webView.emitEventIfBrowserIsVisible(EVENT_ID, 42.0);
-    };
-
-    addAndMakeVisible(emitJavascriptEventButton);
 
     auto screenSize = juce::Desktop::getInstance().getDisplays().getPrimaryDisplay();
     int width = int(std::round(screenSize->userArea.getWidth() * 0.75));
     int height = int(std::round(screenSize->userArea.getHeight() * 0.75));
 
-    addAndMakeVisible(labelUpdatedFromJavaScript);
 
     // temporary rendering of preexisting site
     webView.goToURL("http://localhost:5173/");
@@ -112,10 +98,7 @@ AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
 void AudioPluginAudioProcessorEditor::resized()
 {
     auto bounds =  getLocalBounds();
-    webView.setBounds(bounds.removeFromRight(getWidth() / 2));
-    runJavascriptButton.setBounds(bounds.removeFromTop(50).reduced(5));
-    emitJavascriptEventButton.setBounds(bounds.removeFromTop(50).reduced(5));
-    labelUpdatedFromJavaScript.setBounds(bounds.removeFromTop(50).reduced(5));
+    webView.setBounds(bounds);
 }
 auto AudioPluginAudioProcessorEditor::getResource(const juce::String& url) -> std::optional<Resource> {
     static const auto resourceFileRoot = juce::File{R"(plugin\ui\squash-ui)"};

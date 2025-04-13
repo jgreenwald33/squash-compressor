@@ -7,6 +7,7 @@ namespace webview_plugin {
     class AudioPluginAudioProcessorEditor final : public juce::AudioProcessorEditor
     {
     public:
+        AudioPluginAudioProcessor& audioProcessor;
         explicit AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor&);
         ~AudioPluginAudioProcessorEditor() override;
     
