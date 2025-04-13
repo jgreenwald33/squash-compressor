@@ -5,6 +5,7 @@ import { Button, Container, Group, Paper, Stack, Title } from '@mantine/core'
 // import { LineChart } from '@mantine/charts'
 // import SliderGroup from './components/SliderGroup'
 import NumberSlider from './components/NumberSlider.js';
+import SliderGroup from './components/SliderGroup.js';
 
 function App() {
   // events for JUCE Backend
@@ -52,18 +53,18 @@ function App() {
         </Title>
         <Paper p={"20px"} radius={"md"} px={0}>
           <Group justify='space-between'>
-            {/* <SliderGroup min={0} max={20} effectName='Ratio'/>
-            <SliderGroup min={-60} max={0} step={0.5} effectName='Gain' units='db'/>
-            <SliderGroup min={0} max={100} effectName='Threshold' units='db'/>
-            <SliderGroup min={0} max={100} effectName='Attack' units='ms' />
-            <SliderGroup min={0} max={100} effectName='Release' units='ms'/>
-            <SliderGroup min={0} max={100} effectName='Dry/Wet' units='%'/> */}
-            <NumberSlider min={1} max={10} effectName='Ratio' onChangeEvent={emitRatioEvent}/>
-            <NumberSlider min={-12} max={12} step={0.5} effectName='Gain' units='db' onChangeEvent={emitGainEvent}/>
-            <NumberSlider min={-60.0} max={0} effectName='Threshold' units='db' onChangeEvent={emitThresholdEvent}/>
-            <NumberSlider min={0.01} max={1000} effectName='Attack' units='ms' onChangeEvent={emitAttackEvent} />
-            <NumberSlider min={1.0} max={3000} effectName='Release' units='ms' onChangeEvent={emitReleaseEvent}/>
-            <NumberSlider min={0} max={100} effectName='Dry/Wet' units='%' onChangeEvent={emitDryWetEvent}/>
+            {/* <SliderGroup min={1} max={10} effectName='Ratio' onChangeEvent={emitRatioEvent}/>
+            <SliderGroup min={-12} max={12} step={0.5} effectName='Gain' units='db' onChangeEvent={emitGainEvent}/>
+            <SliderGroup min={-60.0} max={0} effectName='Threshold' units='db' onChangeEvent={emitThresholdEvent}/>
+            <SliderGroup min={0.01} max={1000} effectName='Attack' units='ms' onChangeEvent={emitAttackEvent} />
+            <SliderGroup min={1.0} max={3000} effectName='Release' units='ms' onChangeEvent={emitReleaseEvent}/>
+            <SliderGroup min={0} max={100} effectName='Dry/Wet' units='%' onChangeEvent={emitDryWetEvent}/> */}
+            <NumberSlider min={1} max={10} defaultValue={1} effectName='Ratio' onChangeEvent={emitRatioEvent}/>
+            <NumberSlider min={-12} max={12} step={0.5} defaultValue={0} effectName='Gain' units='db' onChangeEvent={emitGainEvent}/>
+            <NumberSlider min={-60.0} max={0} defaultValue={0} effectName='Threshold' units='db' onChangeEvent={emitThresholdEvent}/>
+            <NumberSlider min={0.01} max={1000} defaultValue={0.01} effectName='Attack' units='ms' onChangeEvent={emitAttackEvent} />
+            <NumberSlider min={1.0} max={3000} defaultValue={1} effectName='Release' units='ms' onChangeEvent={emitReleaseEvent}/>
+            <NumberSlider min={0} max={100} defaultValue={100} effectName='Dry/Wet' units='%' onChangeEvent={emitDryWetEvent}/>
           </Group>
         </Paper>
 
