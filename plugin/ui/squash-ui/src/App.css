@@ -6,3 +6,8 @@
 .m_bc02ba3d::before {
   background: #F96F5D !important;
 }
+
+
+.number-slider {
+  cursor: ew-resize;
+}
