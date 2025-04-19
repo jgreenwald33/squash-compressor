@@ -48,15 +48,11 @@ function App() {
     });
   }
 
-  const [squashFactor, setSquashFactor] = useState(1);
-
-  function handleRatioChange(newSquashFactor:number) {
-    setSquashFactor(squashFactor);
-  }
+  const [amplitude, setAmplitude] = useState<number>(0);
 
   useEffect(()=> {
     window.__JUCE__.backend.addEventListener("getAmplitudeData", (amplitudeData:number)=>{
-      console.log("Received amplitudeData:", amplitudeData);
+      setAmplitude(amplitudeData);
     });
   },[])
 
@@ -77,7 +73,7 @@ function App() {
           >
               <directionalLight color={"#b197fc"} position={[0,0,0]} intensity={1} />
               <ambientLight intensity={0.3} />
-            <AudioRender/>
+            <AudioRender amplitude={amplitude}/>
         </Canvas>
         <Paper p={"5px"} radius={"md"} px={0} style={{background:"inherit"}}>
           <Group justify='space-between'>
@@ -87,7 +83,7 @@ function App() {
             <SliderGroup min={0.01} max={1000} effectName='Attack' units='ms' onChangeEvent={emitAttackEvent} />
             <SliderGroup min={1.0} max={3000} effectName='Release' units='ms' onChangeEvent={emitReleaseEvent}/>
             <SliderGroup min={0} max={100} effectName='Dry/Wet' units='%' onChangeEvent={emitDryWetEvent}/> */}
-            <NumberSlider min={1} max={10} defaultValue={1} effectName='Ratio' onChangeEvent={emitRatioEvent} callBackFunc={handleRatioChange}/>
+            <NumberSlider min={1} max={10} defaultValue={1} effectName='Ratio' onChangeEvent={emitRatioEvent}/>
             <NumberSlider min={-12} max={12} step={0.5} defaultValue={0} effectName='Gain' units='db' onChangeEvent={emitGainEvent}/>
             <NumberSlider min={-60.0} max={0} defaultValue={0} effectName='Threshold' units='db' onChangeEvent={emitThresholdEvent}/>
             <NumberSlider min={0.0} max={1000} defaultValue={0.01} effectName='Attack' units='ms' onChangeEvent={emitAttackEvent} />
