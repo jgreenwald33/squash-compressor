@@ -4,7 +4,7 @@
 #include <juce_gui_extra/juce_gui_extra.h>
 
 namespace webview_plugin {
-    class AudioPluginAudioProcessorEditor final : public juce::AudioProcessorEditor
+    class AudioPluginAudioProcessorEditor final : public juce::AudioProcessorEditor, private juce::Timer
     {
     public:
         AudioPluginAudioProcessor& audioProcessor;
@@ -13,6 +13,11 @@ namespace webview_plugin {
     
         //==============================================================================
         void resized() override;
+
+        // will be used to incrementally send events to the browser
+        void timerCallback() override;
+
+        float amplitudeData = 3.3f;
     
     private:
     using Resource = juce::WebBrowserComponent::Resource;

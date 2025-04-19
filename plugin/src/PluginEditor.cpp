@@ -80,7 +80,6 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     int width = int(std::round(screenSize->userArea.getWidth() * 0.75));
     int height = int(std::round(screenSize->userArea.getHeight() * 0.75));
 
-
     // temporary rendering of preexisting site
     webView.goToURL("http://localhost:5173/");
 
@@ -88,10 +87,18 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     // webView.goToURL(webView.getResourceProviderRoot());
 
     setSize (width, height);
+
+    // make calls every 60 miliseconds
+    // this will trigger the timer callback function
+    startTimer(60);
 }
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
 {
+}
+
+void AudioPluginAudioProcessorEditor::timerCallback() {
+    webView.emitEventIfBrowserIsVisible("getAmplitudeData", amplitudeData);
 }
 
 

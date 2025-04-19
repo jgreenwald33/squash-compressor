@@ -7,7 +7,7 @@ import { Button, Container, Group, Paper, Select, Stack, Title } from '@mantine/
 import NumberSlider from './components/NumberSlider.js';
 import AudioRender from './components/AudioRender.js';
 import { Canvas } from '@react-three/fiber';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DirectionalLight, Fog, Scene } from 'three';
 
 function App() {
@@ -53,6 +53,12 @@ function App() {
   function handleRatioChange(newSquashFactor:number) {
     setSquashFactor(squashFactor);
   }
+
+  useEffect(()=> {
+    window.__JUCE__.backend.addEventListener("getAmplitudeData", (amplitudeData:number)=>{
+      console.log("Received amplitudeData:", amplitudeData);
+    });
+  },[])
 
   return (
     <Container w={"100vw"} h={"100vh"} px={"xs"} py={"lg"} bg={""}>
