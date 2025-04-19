@@ -37,6 +37,10 @@ namespace webview_plugin {
         //==============================================================================
         juce::AudioProcessorEditor* createEditor() override;
         bool hasEditor() const override;
+
+
+        // this will hold the data that is going to be passed in the JS event
+        std::atomic<float> amplitudeData = 0.0f; 
     
         //==============================================================================
         const juce::String getName() const override;

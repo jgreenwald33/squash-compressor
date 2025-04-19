@@ -98,6 +98,7 @@ AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
 }
 
 void AudioPluginAudioProcessorEditor::timerCallback() {
+    float amplitudeData = processorRef.amplitudeData.load();
     webView.emitEventIfBrowserIsVisible("getAmplitudeData", amplitudeData);
 }
 

@@ -16,8 +16,6 @@ namespace webview_plugin {
 
         // will be used to incrementally send events to the browser
         void timerCallback() override;
-
-        float amplitudeData = 3.3f;
     
     private:
     using Resource = juce::WebBrowserComponent::Resource;

@@ -197,6 +197,23 @@ namespace webview_plugin {
     
         // Mix wet/dry signals and update visualizer
         dryWetMixer.mixWetSamples(block);
+
+        // output right here
+        // Measure peak output level after processing
+        float maxLevel = 0.0f;
+
+        for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
+        {
+            const float* channelData = buffer.getReadPointer(ch);
+            for (int i = 0; i < buffer.getNumSamples(); ++i)
+            {
+                float absSample = std::abs(channelData[i]);
+                if (absSample > maxLevel)
+                    maxLevel = absSample;
+            }
+        }
+
+        amplitudeData.store(maxLevel);
     }
 
     //==============================================================================
