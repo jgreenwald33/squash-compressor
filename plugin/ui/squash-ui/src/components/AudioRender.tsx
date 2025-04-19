@@ -2,7 +2,14 @@ import { ThreeElements, useFrame } from "@react-three/fiber";
 import { useRef, useEffect } from "react";
 import * as THREE from "three";
 
-export default function AudioRender(props: ThreeElements['mesh']) {
+interface AudioRenderProps {
+  amplitude: number;
+}
+
+export default function AudioRender({
+  amplitude,
+  ...props
+}: AudioRenderProps & ThreeElements["mesh"]) {
   const mesh = useRef<THREE.Mesh>(null);
   const timeRef = useRef(0);
 
@@ -11,7 +18,8 @@ export default function AudioRender(props: ThreeElements['mesh']) {
       const geometry = mesh.current.geometry;
       const position = geometry.attributes.position;
       mesh.current.rotation.set(Math.PI / 2, 0, 0);
-      const originalZ = [];
+
+      const originalZ: number[] = [];
       for (let i = 0; i < position.count; i++) {
         originalZ.push(position.getZ(i));
       }
@@ -32,11 +40,13 @@ export default function AudioRender(props: ThreeElements['mesh']) {
         const x = position.getX(i);
         const y = position.getY(i);
 
-        // Simulated waveform based on time
-        const fakeAudio = Math.sin(x * 0.3 + timeRef.current * 2) * Math.cos(y * 0.3 + timeRef.current) * 2;
+        const baseWave =
+          Math.sin(x * 0.3 + timeRef.current * 2) *
+          Math.cos(y * 0.3 + timeRef.current);
+        const displacement = baseWave * amplitude * 4.0;
 
         const baseZ = originalZ[i] || 0;
-        position.setZ(i, baseZ + fakeAudio);
+        position.setZ(i, baseZ + displacement);
       }
 
       position.needsUpdate = true;
