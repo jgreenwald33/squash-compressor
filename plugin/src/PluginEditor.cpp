@@ -65,7 +65,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
         })
     .withEventListener("releaseUpdate",
         [this](juce::var releaseObject) {
-            *audioProcessor.processorTree.getRawParameterValue("Releae") = releaseObject.getProperty("releaseVal",1.0f);
+            *audioProcessor.processorTree.getRawParameterValue("Release") = releaseObject.getProperty("releaseVal",1.0f);
         })
     .withEventListener("dryWetUpdate",
         [this](juce::var dryWetObject) {
