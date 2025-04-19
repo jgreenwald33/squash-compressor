@@ -2,3 +2,9 @@ body {
   margin: 0;
   padding: 0;
 }
+
+
+.fill {
+  background: #FFE3E3;
+background: linear-gradient(270deg,rgba(255, 227, 227, 1) 0%, rgba(255, 168, 168, 1) 100%);
+}

@@ -11,3 +11,8 @@
 .number-slider {
   cursor: ew-resize;
 }
+
+body {
+  background: #121212 !important;
+}
+
