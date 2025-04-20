@@ -37,9 +37,7 @@ export default function AudioRender({
       const torusCurrentScale = torusRadius;
       const torusLerpedScale = THREE.MathUtils.lerp(torusCurrentScale, torusTargetScale, 0.1);
       setTorusRadius(torusLerpedScale);
-      const meshScale = mesh.current?.scale.x ?? 0;
-      const difference = Math.abs(torusLerpedScale - meshScale);
-      torusOpacity.current = difference < 0.01 ? 0 : 0.4;
+      torusOpacity.current = preprocessedAmplitude - amplitude === 0 ? 0 : 0.4;
     }
 
   });
