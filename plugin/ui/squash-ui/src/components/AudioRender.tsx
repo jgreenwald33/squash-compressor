@@ -1,5 +1,5 @@
 import { ThreeElements, useFrame } from "@react-three/fiber";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
 
 interface AudioRenderProps {
@@ -11,53 +11,51 @@ export default function AudioRender({
   ...props
 }: AudioRenderProps & ThreeElements["mesh"]) {
   const mesh = useRef<THREE.Mesh>(null);
-  const timeRef = useRef(0);
+  const torusMesh = useRef<THREE.Mesh>(null);
 
-  useEffect(() => {
-    if (mesh.current) {
-      const geometry = mesh.current.geometry;
-      const position = geometry.attributes.position;
-      mesh.current.rotation.set(Math.PI / 2, 0, 0);
 
-      const originalZ: number[] = [];
-      for (let i = 0; i < position.count; i++) {
-        originalZ.push(position.getZ(i));
-      }
-
-      geometry.userData.originalZ = originalZ;
-    }
-  }, []);
-
-  useFrame((state, delta) => {
-    timeRef.current += delta;
-
-    if (mesh.current) {
-      const geometry = mesh.current.geometry;
-      const position = geometry.attributes.position;
-      const originalZ: number[] = geometry.userData.originalZ || [];
-
-      for (let i = 0; i < position.count; i++) {
-        const x = position.getX(i);
-        const y = position.getY(i);
-
-        const baseWave =
-          Math.sin(x * 0.3 + timeRef.current * 2) *
-          Math.cos(y * 0.3 + timeRef.current);
-        const displacement = baseWave * amplitude * 4.0;
-
-        const baseZ = originalZ[i] || 0;
-        position.setZ(i, baseZ + displacement);
-      }
-
-      position.needsUpdate = true;
-      geometry.computeVertexNormals();
-    }
+  useFrame(() => {
+    if (!mesh.current) return;
+  
+    const targetScale = 1 + amplitude;
+  
+    // Smoothly interpolate current scale towards target scale
+    const currentScale = mesh.current.scale.x;
+    const lerpedScale = THREE.MathUtils.lerp(currentScale, targetScale, 0.1);
+    mesh.current.scale.set(lerpedScale, lerpedScale, lerpedScale);
+  
+    // Rotation noise target based on amplitude
+    const rotationXTarget = amplitude * (Math.random() * 2 - 1); // -1 to 1
+    const rotationYTarget = amplitude * (Math.random() * 2 - 1);
+    const rotationZTarget = amplitude * (Math.random() * 2 - 1);
+  
+    // Smoothly add small rotation deltas
+    mesh.current.rotation.x += rotationXTarget * 0.55;
+    mesh.current.rotation.y += rotationYTarget * 0.55;
+    mesh.current.rotation.z += rotationZTarget * 0.55;
   });
+  
 
   return (
-    <mesh scale={1.5} position={[0, 0, 0]} ref={mesh} {...props}>
-      <planeGeometry args={[40, 10, 150, 50]} />
-      <meshToonMaterial wireframe color={"#dbe4ff"} />
+    <>
+    <mesh ref={torusMesh} {...props}>
+      <torusGeometry args={[2, 0.1, 200, 200]} />
+      <meshPhysicalMaterial
+        color="white"
+        transparent
+        opacity={0.15}
+        roughness={0.1}
+        metalness={0}
+        transmission={1} // makes it glass-like
+        thickness={0.5}   // simulates glass thickness
+        ior={1.5}         // index of refraction, tweak for realism
+        depthWrite={false}
+      />
     </mesh>
+      <mesh position={[0,0,0]} ref={mesh} {...props}>
+        <octahedronGeometry args={[1,1]}/>
+        <meshPhongMaterial flatShading color={"#ffa8a8"}/>
+      </mesh>
+    </>
   );
 }
