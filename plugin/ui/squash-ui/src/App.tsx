@@ -1,14 +1,10 @@
 import './App.css'
 import * as Juce from "./juce/index.js";
-// import { useState } from 'react'
-import { Button, Container, Group, Paper, Select, Stack, Title } from '@mantine/core'
-// import { LineChart } from '@mantine/charts'
-// import SliderGroup from './components/SliderGroup'
+import {Container, Group, Paper, Select, Stack, Title } from '@mantine/core'
 import NumberSlider from './components/NumberSlider.js';
 import AudioRender from './components/AudioRender.js';
 import { Canvas } from '@react-three/fiber';
 import { useEffect, useState } from 'react';
-import { DirectionalLight, Fog, Scene } from 'three';
 
 function App() {
   // events for JUCE Backend
@@ -28,6 +24,8 @@ function App() {
     window.__JUCE__.backend.emitEvent("thresholdUpdate", {
       thresholdVal: thresholdVal
     });
+
+    setThreshold(thresholdVal);
   }
 
   function emitAttackEvent(attackVal:number) {
@@ -46,6 +44,7 @@ function App() {
     window.__JUCE__.backend.emitEvent("dryWetUpdate", {
       dryWetVal: dryWetVal
     });
+
   }
 
   const [amplitude, setAmplitude] = useState<number>(0);
@@ -56,44 +55,43 @@ function App() {
     });
   },[])
 
+  const [threshold, setThreshold] = useState<number>(0);
+
   return (
     <Container w={"100vw"} h={"100vh"} px={"xs"} py={"lg"} bg={""}>
       <Stack h={"100%"} justify='space-between' gap={"sm"}>
         <Group w={"100%"} justify='space-between' align='center'>
-          <Title w={"fit-content"} style={{textAlign:"start"}}>
+          <Title w={"fit-content"} style={{textAlign:"start"}} c="#fff">
             Squash Compressor
           </Title>
-          <Select
+          <Select id='custom-select'
+              bg={"gray.3"}
               placeholder="Presets"
               data={['Custom', 'Punchy', 'Limiter']}
             />
         </Group>
-        <Canvas style={{ background: '#f1f3f5', borderRadius: '5px' }} 
-                camera={{ position: [0, 2, 15]}}
-          >
-              <directionalLight color={"#b197fc"} position={[0,0,0]} intensity={1} />
-              <ambientLight intensity={0.3} />
-            <AudioRender amplitude={amplitude}/>
+        <Canvas >
+          <directionalLight
+            position={[5, 10, 100]}
+            intensity={1.2}
+            castShadow
+            shadow-mapSize-width={1024}
+            shadow-mapSize-height={1024}
+          />
+          <ambientLight intensity={0.3} /> 
+          <AudioRender thresholdDb={threshold} amplitude={amplitude} />
         </Canvas>
         <Paper p={"5px"} radius={"md"} px={0} style={{background:"inherit"}}>
           <Group justify='space-between'>
-            {/* <SliderGroup min={1} max={10} effectName='Ratio' onChangeEvent={emitRatioEvent}/>
-            <SliderGroup min={-12} max={12} step={0.5} effectName='Gain' units='db' onChangeEvent={emitGainEvent}/>
-            <SliderGroup min={-60.0} max={0} effectName='Threshold' units='db' onChangeEvent={emitThresholdEvent}/>
-            <SliderGroup min={0.01} max={1000} effectName='Attack' units='ms' onChangeEvent={emitAttackEvent} />
-            <SliderGroup min={1.0} max={3000} effectName='Release' units='ms' onChangeEvent={emitReleaseEvent}/>
-            <SliderGroup min={0} max={100} effectName='Dry/Wet' units='%' onChangeEvent={emitDryWetEvent}/> */}
             <NumberSlider min={1} max={10} defaultValue={1} effectName='Ratio' onChangeEvent={emitRatioEvent}/>
             <NumberSlider min={-12} max={12} step={0.5} defaultValue={0} effectName='Gain' units='db' onChangeEvent={emitGainEvent}/>
             <NumberSlider min={-60.0} max={0} defaultValue={0} effectName='Threshold' units='db' onChangeEvent={emitThresholdEvent}/>
-            <NumberSlider min={0.0} max={1000} defaultValue={0.01} effectName='Attack' units='ms' onChangeEvent={emitAttackEvent} />
+            <NumberSlider min={0.0} max={1000} defaultValue={0} effectName='Attack' units='ms' onChangeEvent={emitAttackEvent} />
             <NumberSlider min={1.0} max={3000} defaultValue={1} effectName='Release' units='ms' onChangeEvent={emitReleaseEvent}/>
             <NumberSlider min={0} max={100} defaultValue={100} effectName='Dry/Wet' units='%' onChangeEvent={emitDryWetEvent}/>
           </Group>
         </Paper>
-
       </Stack>
-
     </Container>
   )
 }

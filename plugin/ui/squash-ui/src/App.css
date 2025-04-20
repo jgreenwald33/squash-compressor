@@ -16,3 +16,26 @@ body {
   background: #121212 !important;
 }
 
+.mantine-Select-input, .mantine-Select-dropdown {
+  background: var(--mantine-color-gray-9)!important;
+  border-radius: 5px !important;
+  border: none !important;
+  color:#fff !important;
+}
+
+
+
+.mantine-Select-root,.mantine-Input-wrapper {
+  border-radius: 5px;
+  background-color: #121212;
+  border:none !important;
+  color:#fff !important;
+}
+
+.mantine-Select-option {
+  transition: 150ms;
+}
+
+.mantine-Select-option:hover {
+  background-color: var(--mantine-color-gray-7) !important;
+}
