@@ -33,8 +33,6 @@ function App() {
     window.__JUCE__.backend.emitEvent("thresholdUpdate", {
       thresholdVal: thresholdVal
     });
-
-    setThreshold(thresholdVal);
     setPresetChoice("Custom");
   }
 
@@ -121,7 +119,7 @@ function App() {
             shadow-mapSize-height={1024}
           />
           <ambientLight intensity={0.3} /> 
-          <AudioRender thresholdDb={threshold} amplitude={amplitude} />
+          <AudioRender preprocessedAmplitude={preprocessedAmplitudeData} amplitude={amplitude} />
         </Canvas>
         <Paper p={"5px"} radius={"md"} px={0} style={{background:"inherit"}}>
           <Group justify='space-between'>
