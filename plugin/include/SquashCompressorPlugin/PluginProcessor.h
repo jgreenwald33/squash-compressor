@@ -41,6 +41,7 @@ namespace webview_plugin {
 
         // this will hold the data that is going to be passed in the JS event
         std::atomic<float> amplitudeData = 0.0f; 
+        std::atomic<float> preprocessedAmplitudeData = 0.0f;
     
         //==============================================================================
         const juce::String getName() const override;

@@ -99,7 +99,14 @@ AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
 
 void AudioPluginAudioProcessorEditor::timerCallback() {
     float amplitudeData = processorRef.amplitudeData.load();
-    webView.emitEventIfBrowserIsVisible("getAmplitudeData", amplitudeData);
+    float beforeAmplitudeData = processorRef.preprocessedAmplitudeData.load();
+
+    // convert as JSON
+    juce::var jsonData(juce::DynamicObject::Ptr(new juce::DynamicObject()));
+    jsonData.getDynamicObject()->setProperty("amplitudeData", amplitudeData);
+    jsonData.getDynamicObject()->setProperty("preprocessedAmplitudeData", beforeAmplitudeData);
+    
+    webView.emitEventIfBrowserIsVisible("getAmplitudeData", jsonData);
 }
 
 
