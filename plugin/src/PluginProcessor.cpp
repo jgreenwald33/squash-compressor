@@ -161,6 +161,23 @@ namespace webview_plugin {
         
         juce::dsp::AudioBlock<float> block(buffer);
         drySignal.makeCopyOf(buffer);
+
+        float preMaxLevel = 0.0f;
+
+        for (int ch = 0; ch < drySignal.getNumChannels(); ++ch)
+        {
+            const float* channelData = drySignal.getReadPointer(ch);
+            for (int i = 0; i < drySignal.getNumSamples(); ++i)
+            {
+                float absSample = std::abs(channelData[i]);
+                if (absSample > preMaxLevel)
+                    preMaxLevel = absSample;
+            }
+        }
+
+        // Store the preprocessed peak level
+        preprocessedAmplitudeData.store(preMaxLevel);
+
         juce::dsp::AudioBlock<const float> dryBlock(drySignal);
         dryWetMixer.pushDrySamples(dryBlock);
 
