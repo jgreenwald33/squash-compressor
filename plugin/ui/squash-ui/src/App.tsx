@@ -97,7 +97,7 @@ function App() {
   return (
     <Container w={"100vw"} h={"100vh"} px={"xs"} py={"lg"} bg={""}>
       <Modal size={"xl"} opened={opened} onClose={close} title="Help">
-        <Title size="md">
+        <Title size="md" mt={'xs'}>
           Visuals
         </Title>
         <Text my={"xs"} size='sm' c='gray.4'>

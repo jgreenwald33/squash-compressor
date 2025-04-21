@@ -60,3 +60,9 @@ body {
 .mantine-Modal-close:hover svg {
   color: var(--mantine-color-gray-4);
 }
+
+.mantine-Modal-header {
+  border-bottom: 1px solid var(--mantine-color-gray-7) !important;
+  border-bottom-left-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
