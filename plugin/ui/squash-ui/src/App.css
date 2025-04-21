@@ -47,6 +47,11 @@ body {
   color: var(--mantine-color-gray-7);
 }
 
+.mantine-Modal-title {
+  font-size: var(--mantine-font-size-xl) !important;
+  font-weight: bold !important;
+}
+
 .mantine-Modal-close:hover {
   background-color: var(--mantine-color-gray-7) !important;
   color: white;
