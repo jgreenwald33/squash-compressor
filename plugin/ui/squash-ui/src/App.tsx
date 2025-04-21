@@ -1,11 +1,12 @@
 import './App.css'
 import logo from "./assets/squash compressor logo.png"
 import * as Juce from "./juce/index.js";
-import {Container, Group, Image, Paper, Select, Stack, Title } from '@mantine/core'
+import {ActionIcon, Container, Group, Image, Modal, Paper, Select, Stack, Text, Title } from '@mantine/core'
 import NumberSlider from './components/NumberSlider.js';
 import AudioRender from './components/AudioRender.js';
 import { Canvas } from '@react-three/fiber';
 import { useEffect, useState } from 'react';
+import { useDisclosure } from '@mantine/hooks';
 
 // holds the structure of the JSON coming from the JUCE backend
 interface AudioData {
@@ -77,7 +78,7 @@ function App() {
   const [release,setRelease] = useState<number>(0);
   const [gain, setGain] = useState<number>(0);
   const [presetChoice, setPresetChoice] = useState<string | null>("Default")
-
+  const [opened, { open, close }] = useDisclosure(false);
 
   function handlePresetChange(presetName:string) {
       switch (presetName) {
@@ -95,20 +96,87 @@ function App() {
 
   return (
     <Container w={"100vw"} h={"100vh"} px={"xs"} py={"lg"} bg={""}>
+      <Modal size={"xl"} opened={opened} onClose={close} title="Help">
+        <Title size="md">
+          Visuals
+        </Title>
+        <Text my={"xs"} size='sm' c='gray.4'>
+          The shape indicator represents the processed audio, while the ring represents the pre-processed audio.
+        </Text>
+        <Title size="md">
+          Effects
+        </Title>
+        <Stack mt={"xs"}>
+          <Stack gap={1}>
+            <Text size='sm'>
+              Ratio
+            </Text>
+            <Text size='xs' c='gray.4'>
+              Controls the ratio or amount that the audio is compressed. A higher ratio results in more heavily compressed audio.
+            </Text>
+          </Stack>
+          <Stack gap={1}>
+            <Text size='sm'>
+              Threshold
+            </Text>
+            <Text size='xs' c='gray.4'>
+              Sets a decibel level relative to the incoming audio, where any audio above that value is compressed.
+            </Text>
+          </Stack>
+          <Stack gap={1}>
+            <Text size='sm'>
+              Gain
+            </Text>
+            <Text size='xs' c='gray.4'>
+              Controls the makeup gain or "loudness" after the compression.
+            </Text>
+          </Stack>
+          <Stack gap={1}>
+            <Text size='sm'>
+              Attack
+            </Text>
+            <Text size='xs' c='gray.4'>
+              Controls the amount of time it takes for the compressor to compress the audio.
+            </Text>
+          </Stack>
+          <Stack gap={1}>
+            <Text size='sm'>
+              Release
+            </Text>
+            <Text size='xs' c='gray.4'>
+              Controls the amount of time it takes for the compressor to stop compressing the audio after being compressed.
+            </Text>
+          </Stack>
+          <Stack gap={1}>
+            <Text size='sm'>
+              Dry/Wet
+            </Text>
+            <Text size='xs' c='gray.4'>
+              Controls the mix of the processed audio signal with orignal pre-processed audio. 100% "wet" means that the effects are fully being applied.
+            </Text>
+          </Stack>
+        </Stack>
+
+      </Modal>
       <Stack h={"100%"} justify='space-between' gap={"sm"}>
         <Group w={"100%"} justify='space-between' align='center'>
           <Image src={logo} w={"25%"} alt="Squash compressor logo"/>
-          <Select id='custom-select'
-              bg={"gray.3"}
-              placeholder="Presets"
-              value={presetChoice}
-              onChange={(e)=> {
-                if (e !== null) {
-                  handlePresetChange(e);
-                }
-              }}
-              data={['Default', 'Punchy', 'Limiter', 'Custom']}
-            />
+          <Group>
+            <ActionIcon variant="subtle" radius="xl" aria-label="Help" color="gray" onClick={open}>
+              ?
+            </ActionIcon>
+            <Select id='custom-select'
+                bg={"gray.3"}
+                placeholder="Presets"
+                value={presetChoice}
+                onChange={(e)=> {
+                  if (e !== null) {
+                    handlePresetChange(e);
+                  }
+                }}
+                data={['Default', 'Punchy', 'Limiter', 'Custom']}
+              />
+          </Group>
         </Group>
         <Canvas>
           <directionalLight
@@ -124,8 +192,8 @@ function App() {
         <Paper p={"5px"} radius={"md"} px={0} style={{background:"inherit"}}>
           <Group justify='space-between'>
             <NumberSlider min={1} max={10} defaultValue={ratio} effectName='Ratio' onChangeEvent={emitRatioEvent}/>
-            <NumberSlider min={-12} max={12} step={0.5} defaultValue={gain} effectName='Gain' units='db' onChangeEvent={emitGainEvent}/>
             <NumberSlider min={-60.0} max={0} defaultValue={threshold} effectName='Threshold' units='db' onChangeEvent={emitThresholdEvent}/>
+            <NumberSlider min={-12} max={12} step={0.5} defaultValue={gain} effectName='Gain' units='db' onChangeEvent={emitGainEvent}/>
             <NumberSlider min={0.0} max={1000} defaultValue={attack} effectName='Attack' units='ms' onChangeEvent={emitAttackEvent} />
             <NumberSlider min={1.0} max={3000} defaultValue={release} effectName='Release' units='ms' onChangeEvent={emitReleaseEvent}/>
             <NumberSlider min={0} max={100} defaultValue={100} effectName='Dry/Wet' units='%' onChangeEvent={emitDryWetEvent}/>

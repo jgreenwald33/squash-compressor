@@ -16,13 +16,12 @@ body {
   background: #121212 !important;
 }
 
-.mantine-Select-input, .mantine-Select-dropdown {
+.mantine-Select-input, .mantine-Select-dropdown, .mantine-Modal-content, .mantine-Modal-header {
   background: var(--mantine-color-gray-9)!important;
   border-radius: 5px !important;
   border: none !important;
   color:#fff !important;
 }
-
 
 
 .mantine-Select-root,.mantine-Input-wrapper {
@@ -36,6 +35,23 @@ body {
   transition: 150ms;
 }
 
-.mantine-Select-option:hover {
+.mantine-Modal-close {
+  border-radius: 99999px !important;
+}
+
+.mantine-Select-option:hover  {
   background-color: var(--mantine-color-gray-7) !important;
+}
+
+.mantine-Modal-close svg{
+  color: var(--mantine-color-gray-7);
+}
+
+.mantine-Modal-close:hover {
+  background-color: var(--mantine-color-gray-7) !important;
+  color: white;
+}
+
+.mantine-Modal-close:hover svg {
+  color: var(--mantine-color-gray-4);
 }
