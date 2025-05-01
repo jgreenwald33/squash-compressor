@@ -72,8 +72,9 @@ This project is built utilizing the C++ framework <a href="https://juce.com/">JU
 The main JUCE logic and implementation is contained within the PluginEditor and PluginProcessor cpp files, along with their corresponding header files. The PluginProcessor file handles preparing the digital signal chain for processing the audio and processing blocks of audio data. The PluginEditor file deals with configuring the rendered window and the components that exist within it. Since this project utilizes JUCE WebViews, the configuration to communicate between the web components and the JUCE backend are also in this file.
 <br/>
 <br/>
-The user interface was developed utilizing React and leveraging the Mantine component library. This library provided UI components and hooks that were essential for creating the functionality 
+The user interface was developed utilizing React and leveraging the Mantine component library. This library provided UI components and hooks that were essential for creating the functionality needed for certain parts of the program. Fiber React Three was used to develop rendered 3D components. These components reflect the audio amplitude values that are being passed in realtime from the backend of the 
 
 <h2>
   Download
 </h2>
+Currently, the project still needs to be manually built using CMAKE and the React frontend needs to running on the local development server. The React files will soon be compiled and served to the JUCE backend to avoid this. A folder will be included with prebuilt executables to be able to use the application without needing to build it.
